@@ -2,8 +2,6 @@ package org.wycliffeassociates.usfmtools.models;
 
 import org.wycliffeassociates.usfmtools.models.markers.Marker;
 
-
-
 /** 
  A holder class to take the place of a tuple
 */
