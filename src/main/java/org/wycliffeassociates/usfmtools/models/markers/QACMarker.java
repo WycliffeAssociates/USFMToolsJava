@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 /** 
  Marker to indicate the acrostic letter within a poetic line
 */

@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 /** 
  Tag for the Alternative language short table of contents
 */

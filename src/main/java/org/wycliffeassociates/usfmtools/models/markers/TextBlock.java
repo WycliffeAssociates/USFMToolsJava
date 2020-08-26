@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 /** 
  A "marker" for a text block. This exists so that we can handle 
 */

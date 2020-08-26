@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 public class UnknownMarker extends Marker
 {
 	public String ParsedIdentifier;

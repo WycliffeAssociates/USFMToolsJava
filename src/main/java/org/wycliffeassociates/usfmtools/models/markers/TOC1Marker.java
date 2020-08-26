@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 /** 
  A tag for the long table of contents
 */

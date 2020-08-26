@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 /** 
  Published Chapter Marker (for when it isn't an english number)
 */

@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 public class NDEndMarker extends Marker
 {
 	@Override

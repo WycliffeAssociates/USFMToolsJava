@@ -1,7 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
 import java.util.*;
 
 public abstract class Marker

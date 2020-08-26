@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 public class REMMarker extends Marker
 {
 	public String Comment;

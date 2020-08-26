@@ -34,13 +34,14 @@ public class WMarker extends Marker
 			for (String attr : wordAttr)
 			{
 				Matcher attrMatch = wordAttrPattern.matcher(attr);
+				attrMatch.matches();
 				if (attrMatch.group(2).length() == 0)
 				{
 					Attributes.put("lemma", attrMatch.group(1));
 				}
 				else
 				{
-					Attributes.put(attrMatch.group(1), attrMatch.group());
+					Attributes.put(attrMatch.group(1), attrMatch.group(2));
 				}
 
 			}

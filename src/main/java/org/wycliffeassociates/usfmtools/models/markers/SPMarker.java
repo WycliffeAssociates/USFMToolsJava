@@ -1,8 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
-
 /** 
  A speaker Marker (Used mostly in Job and Songs of Solomon)
 */

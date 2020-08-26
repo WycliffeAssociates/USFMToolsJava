@@ -329,6 +329,7 @@ public class USFMParserTest
         Assert.assertEquals("Berhala", ((WMarker)parser.ParseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w Berhala \\w* di Daftar Istilah.\\f*").Contents.get(0).Contents.get(2).Contents.get(1)).Term);
         // Word Entry Attributes
         Assert.assertEquals("Berhala", ((WMarker)parser.ParseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w Berhala|Berhala \\w* di Daftar Istilah.\\f*").Contents.get(0).Contents.get(2).Contents.get(1)).Attributes.get("lemma"));
+        var stuff = ((WMarker)parser.ParseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|lemma=\"grace\" \\w* di Daftar Istilah.\\f*").Contents.get(0).Contents.get(2).Contents.get(1));
         Assert.assertEquals("grace", ((WMarker)parser.ParseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|lemma=\"grace\" \\w* di Daftar Istilah.\\f*").Contents.get(0).Contents.get(2).Contents.get(1)).Attributes.get("lemma"));
         Assert.assertEquals("G5485", ((WMarker)parser.ParseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|lemma=\"grace\" strong=\"G5485\" \\w* di Daftar Istilah.\\f*").Contents.get(0).Contents.get(2).Contents.get(1)).Attributes.get("strong"));
         Assert.assertEquals("H1234,G5485", ((WMarker)parser.ParseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|strong=\"H1234,G5485\" \\w* di Daftar Istilah.\\f*").Contents.get(0).Contents.get(2).Contents.get(1)).Attributes.get("strong"));
@@ -407,7 +408,7 @@ public class USFMParserTest
     public void testWhitespacePreserve() throws Exception {
         String verseText = "This is verse text ";
         String otherVerseText = " after the word";
-        USFMDocument output = parser.ParseFromString("\\v 1 {verseText}\\bd Bold \\bd*{otherVerseText}");
+        USFMDocument output = parser.ParseFromString("\\v 1 " + verseText+ "\\bd Bold \\bd*" + otherVerseText);
         Assert.assertEquals(verseText, ((TextBlock)output.Contents.get(0).Contents.get(0)).Text);
         Assert.assertEquals(otherVerseText, ((TextBlock)output.Contents.get(0).Contents.get(3)).Text);
     }

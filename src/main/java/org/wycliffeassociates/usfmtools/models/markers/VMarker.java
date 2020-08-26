@@ -33,6 +33,7 @@ public class VMarker extends Marker
 	public String PreProcess(String input)
 	{
 		Matcher match = verseRegex.matcher(input);
+		match.matches();
 		VerseNumber = match.group(1);
 		if (!tangible.StringHelper.isNullOrWhiteSpace(VerseNumber))
 		{

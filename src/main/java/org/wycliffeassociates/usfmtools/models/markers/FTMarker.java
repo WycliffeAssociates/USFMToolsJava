@@ -1,7 +1,5 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-
-
 import java.util.*;
 
 public class FTMarker extends Marker
