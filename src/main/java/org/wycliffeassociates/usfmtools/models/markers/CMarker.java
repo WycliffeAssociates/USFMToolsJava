@@ -45,7 +45,7 @@ public class CMarker extends Marker
 	public String PreProcess(String input)
 	{
 		Matcher match = regex.matcher(input);
-		if (match.matches())
+		if (match.find())
 		{
 			if (tangible.StringHelper.isNullOrWhiteSpace(match.group(1)))
 			{
