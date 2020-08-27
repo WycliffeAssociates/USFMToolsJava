@@ -34,7 +34,7 @@ public class WMarker extends Marker
 			for (String attr : wordAttr)
 			{
 				Matcher attrMatch = wordAttrPattern.matcher(attr);
-				attrMatch.matches();
+				attrMatch.find();
 				if (attrMatch.group(2).length() == 0)
 				{
 					Attributes.put("lemma", attrMatch.group(1));
