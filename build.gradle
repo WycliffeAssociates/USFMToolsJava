@@ -1,14 +1,51 @@
+buildscript {
+    repositories {
+        jcenter()
+        maven { url "https://plugins.gradle.org/m2/" }
+    }
+}
+
 plugins {
     id 'java'
 }
+
+apply plugin: 'maven'
 
 group 'org.wycliffeassociates'
 version '1.0-SNAPSHOT'
 
 repositories {
-    mavenCentral()
+    jcenter()
 }
 
 dependencies {
     testCompile group: 'junit', name: 'junit', version: '4.12'
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            repository(url: "${System.getenv("NEXUS_URL")}/repository/maven-releases") {
+                authentication(
+                        userName: System.getenv("NEXUS_USER"),
+                        password: System.getenv("NEXUS_PASSWORD")
+                )
+            }
+            snapshotRepository(url: "${System.getenv("NEXUS_URL")}/repository/maven-snapshots") {
+                authentication(
+                        userName: System.getenv("NEXUS_USER"),
+                        password: System.getenv("NEXUS_PASSWORD")
+                )
+            }
+            pom.project {
+                licenses {
+                    license {
+                        name 'MIT License'
+                        url 'https://raw.githubusercontent.com/WycliffeAssociates/USFMToolsJava/master/LICENSE'
+                        distribution 'repo'
+                    }
+                }
+            }
+        }
+    }
 }
