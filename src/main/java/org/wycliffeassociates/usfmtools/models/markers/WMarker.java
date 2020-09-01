@@ -4,51 +4,41 @@ import java.util.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-/** 
- Wordlist / Glossary / Dictionary Entry Marker
-*/
-public class WMarker extends Marker
-{
-	public String Term;
-	public HashMap<String, String> Attributes;
-	private static Pattern wordAttrPattern = Pattern.compile("([\\w]+)=?\"?([\\w,:.]*)\"?");
-	@Override
-	public String getIdentifier()
-	{
-		return "w";
-	}
+/**
+ * Wordlist / Glossary / Dictionary Entry Marker
+ */
+public class WMarker extends Marker {
+    public String term;
+    public HashMap<String, String> attributes;
+    private static Pattern wordAttrPattern = Pattern.compile("([\\w]+)=?\"?([\\w,:.]*)\"?");
 
-	@Override
-	public String PreProcess(String input)
-	{
-		input = input.trim();
-		Attributes = new HashMap<String, String>();
+    @Override
+    public String getIdentifier() {
+        return "w";
+    }
 
-		String[] wordEntry = input.split("[|]", -1);
-		Term = wordEntry[0];
+    @Override
+    public String preProcess(String input) {
+        input = input.trim();
+        attributes = new HashMap<String, String>();
 
-		if (wordEntry.length > 1)
-		{
+        String[] wordEntry = input.split("[|]", -1);
+        term = wordEntry[0];
 
-			String[] wordAttr = wordEntry[1].split("[ ]", -1);
-			for (String attr : wordAttr)
-			{
-				Matcher attrMatch = wordAttrPattern.matcher(attr);
-				attrMatch.find();
-				if (attrMatch.group(2).length() == 0)
-				{
-					Attributes.put("lemma", attrMatch.group(1));
-				}
-				else
-				{
-					Attributes.put(attrMatch.group(1), attrMatch.group(2));
-				}
+        if (wordEntry.length > 1) {
+            String[] wordAttr = wordEntry[1].split("[ ]", -1);
+            for (String attr : wordAttr) {
+                Matcher attrMatch = wordAttrPattern.matcher(attr);
+                attrMatch.find();
+                if (attrMatch.group(2).length() == 0) {
+                    attributes.put("lemma", attrMatch.group(1));
+                } else {
+                    attributes.put(attrMatch.group(1), attrMatch.group(2));
+                }
+            }
+        }
 
-			}
-
-		}
-
-		return "";
-	}
+        return "";
+    }
 
 }

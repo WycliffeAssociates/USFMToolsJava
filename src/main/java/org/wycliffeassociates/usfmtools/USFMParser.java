@@ -11,49 +11,49 @@ import org.wycliffeassociates.usfmtools.models.markers.*;
  * Parses a USFM file into a Abstract Syntax Tree
  */
 public class USFMParser {
-    private ArrayList<String> IgnoredTags;
+    private ArrayList<String> ignoredTags;
 
     public USFMParser() {
-        IgnoredTags = new ArrayList<String>();
+        ignoredTags = new ArrayList<String>();
     }
 
     public USFMParser(ArrayList<String> tagsToIgnore) {
-        IgnoredTags = tagsToIgnore;
+        ignoredTags = tagsToIgnore;
     }
 
-    public final USFMDocument ParseFromString(String input) {
+    public final USFMDocument parseFromString(String input) {
         Pattern splitRegex = Pattern.compile("\\\\([a-z0-9\\-]*\\**)([^\\\\]*)");
         USFMDocument output = new USFMDocument();
         Matcher match = splitRegex.matcher(input);
         while (match.find()) {
-            if (match.groupCount() > 1 && IgnoredTags.contains(match.group(1))) {
+            if (match.groupCount() > 1 && ignoredTags.contains(match.group(1))) {
                 continue;
             }
 
-            ConvertToMarkerResult result = ConvertToMarker(match.group(1), match.group(2));
+            ConvertToMarkerResult result = convertToMarker(match.group(1), match.group(2));
             result.marker.setPosition(match.start());
 
-            if (result.marker instanceof TRMarker && !output.GetTypesPathToLastMarker().contains(TableBlock.class)) {
-                output.Insert(new TableBlock());
+            if (result.marker instanceof TRMarker && !output.getTypesPathToLastMarker().contains(TableBlock.class)) {
+                output.insert(new TableBlock());
             }
 
-            output.Insert(result.marker);
+            output.insert(result.marker);
 
             if (!tangible.StringHelper.isNullOrWhiteSpace(result.remainingText)) {
-                output.Insert(new TextBlock(result.remainingText));
+                output.insert(new TextBlock(result.remainingText));
             }
         }
 
         return output;
     }
 
-    private ConvertToMarkerResult ConvertToMarker(String identifier, String value) {
-        Marker output = SelectMarker(identifier);
-        String tmp = output.PreProcess(value);
+    private ConvertToMarkerResult convertToMarker(String identifier, String value) {
+        Marker output = selectMarker(identifier);
+        String tmp = output.preProcess(value);
         return new ConvertToMarkerResult(output, tmp);
     }
 
-    private Marker SelectMarker(String identifier) {
+    private Marker selectMarker(String identifier) {
         switch (identifier) {
             case "id":
                 return new IDMarker();
@@ -82,22 +82,22 @@ public class USFMParser {
                 return new IMTMarker();
             case "imt2":
                 IMTMarker tempVar = new IMTMarker();
-                tempVar.Weight = 2;
+                tempVar.weight = 2;
                 return tempVar;
             case "imt3":
                 IMTMarker tempVar2 = new IMTMarker();
-                tempVar2.Weight = 3;
+                tempVar2.weight = 3;
                 return tempVar2;
             case "is":
             case "is1":
                 return new ISMarker();
             case "is2":
                 ISMarker tempVar3 = new ISMarker();
-                tempVar3.Weight = 2;
+                tempVar3.weight = 2;
                 return tempVar3;
             case "is3":
                 ISMarker tempVar4 = new ISMarker();
-                tempVar4.Weight = 3;
+                tempVar4.weight = 3;
                 return tempVar4;
             case "ib":
                 return new IBMarker();
@@ -106,11 +106,11 @@ public class USFMParser {
                 return new IQMarker();
             case "iq2":
                 IQMarker tempVar5 = new IQMarker();
-                tempVar5.Depth = 2;
+                tempVar5.depth = 2;
                 return tempVar5;
             case "iq3":
                 IQMarker tempVar6 = new IQMarker();
-                tempVar6.Depth = 3;
+                tempVar6.depth = 3;
                 return tempVar6;
             case "iot":
                 return new IOTMarker();
@@ -119,11 +119,11 @@ public class USFMParser {
                 return new IOMarker();
             case "io2":
                 IOMarker tempVar7 = new IOMarker();
-                tempVar7.Depth = 2;
+                tempVar7.depth = 2;
                 return tempVar7;
             case "io3":
                 IOMarker tempVar8 = new IOMarker();
-                tempVar8.Depth = 3;
+                tempVar8.depth = 3;
                 return tempVar8;
             case "ior":
                 return new IORMarker();
@@ -134,11 +134,11 @@ public class USFMParser {
                 return new ILIMarker();
             case "ili2":
                 ILIMarker tempVar9 = new ILIMarker();
-                tempVar9.Depth = 2;
+                tempVar9.depth = 2;
                 return tempVar9;
             case "ili3":
                 ILIMarker tempVar10 = new ILIMarker();
-                tempVar10.Depth = 3;
+                tempVar10.depth = 3;
                 return tempVar10;
             case "ip":
                 return new IPMarker();
@@ -159,11 +159,11 @@ public class USFMParser {
                 return new MTMarker();
             case "mt2":
                 MTMarker tempVar11 = new MTMarker();
-                tempVar11.Weight = 2;
+                tempVar11.weight = 2;
                 return tempVar11;
             case "mt3":
                 MTMarker tempVar12 = new MTMarker();
-                tempVar12.Weight = 3;
+                tempVar12.weight = 3;
                 return tempVar12;
             case "c":
                 return new CMarker();
@@ -190,11 +190,11 @@ public class USFMParser {
                 return new QMarker();
             case "q2":
                 QMarker tempVar13 = new QMarker();
-                tempVar13.Depth = 2;
+                tempVar13.depth = 2;
                 return tempVar13;
             case "q3":
                 QMarker tempVar14 = new QMarker();
-                tempVar14.Depth = 3;
+                tempVar14.depth = 3;
                 return tempVar14;
             case "qr":
                 return new QRMarker();
@@ -209,15 +209,15 @@ public class USFMParser {
             case "qm":
             case "qm1":
                 QMMarker tempVar15 = new QMMarker();
-                tempVar15.Depth = 1;
+                tempVar15.depth = 1;
                 return tempVar15;
             case "qm2":
                 QMMarker tempVar16 = new QMMarker();
-                tempVar16.Depth = 2;
+                tempVar16.depth = 2;
                 return tempVar16;
             case "qm3":
                 QMMarker tempVar17 = new QMMarker();
-                tempVar17.Depth = 3;
+                tempVar17.depth = 3;
                 return tempVar17;
             case "m":
                 return new MMarker();
@@ -228,11 +228,11 @@ public class USFMParser {
                 return new MSMarker();
             case "ms2":
                 MSMarker tempVar18 = new MSMarker();
-                tempVar18.Weight = 2;
+                tempVar18.weight = 2;
                 return tempVar18;
             case "ms3":
                 MSMarker tempVar19 = new MSMarker();
-                tempVar19.Weight = 3;
+                tempVar19.weight = 3;
                 return tempVar19;
             case "mr":
                 return new MRMarker();
@@ -261,11 +261,11 @@ public class USFMParser {
                 return new PIMarker();
             case "pi2":
                 PIMarker tempVar20 = new PIMarker();
-                tempVar20.Depth = 2;
+                tempVar20.depth = 2;
                 return tempVar20;
             case "pi3":
                 PIMarker tempVar21 = new PIMarker();
-                tempVar21.Depth = 3;
+                tempVar21.depth = 3;
                 return tempVar21;
             case "sp":
                 return new SPMarker();
@@ -298,11 +298,11 @@ public class USFMParser {
                 return new SMarker();
             case "s2":
                 SMarker tempVar22 = new SMarker();
-                tempVar22.Weight = 2;
+                tempVar22.weight = 2;
                 return tempVar22;
             case "s3":
                 SMarker tempVar23 = new SMarker();
-                tempVar23.Weight = 3;
+                tempVar23.weight = 3;
                 return tempVar23;
             case "bk":
                 return new BKMarker();
@@ -313,11 +313,11 @@ public class USFMParser {
                 return new LIMarker();
             case "li2":
                 LIMarker tempVar24 = new LIMarker();
-                tempVar24.Depth = 2;
+                tempVar24.depth = 2;
                 return tempVar24;
             case "li3":
                 LIMarker tempVar25 = new LIMarker();
-                tempVar25.Depth = 3;
+                tempVar25.depth = 3;
                 return tempVar25;
             case "add":
                 return new ADDMarker();
@@ -365,19 +365,19 @@ public class USFMParser {
                 return new THRMarker();
             case "th2":
                 THMarker tempVar26 = new THMarker();
-                tempVar26.ColumnPosition = 2;
+                tempVar26.columnPosition = 2;
                 return tempVar26;
             case "thr2":
                 THRMarker tempVar27 = new THRMarker();
-                tempVar27.ColumnPosition = 2;
+                tempVar27.columnPosition = 2;
                 return tempVar27;
             case "th3":
                 THMarker tempVar28 = new THMarker();
-                tempVar28.ColumnPosition = 3;
+                tempVar28.columnPosition = 3;
                 return tempVar28;
             case "thr3":
                 THRMarker tempVar29 = new THRMarker();
-                tempVar29.ColumnPosition = 3;
+                tempVar29.columnPosition = 3;
                 return tempVar29;
             case "tc1":
                 return new TCMarker();
@@ -385,19 +385,19 @@ public class USFMParser {
                 return new TCRMarker();
             case "tc2":
                 TCMarker tempVar30 = new TCMarker();
-                tempVar30.ColumnPosition = 2;
+                tempVar30.columnPosition = 2;
                 return tempVar30;
             case "tcr2":
                 TCRMarker tempVar31 = new TCRMarker();
-                tempVar31.ColumnPosition = 2;
+                tempVar31.columnPosition = 2;
                 return tempVar31;
             case "tc3":
                 TCMarker tempVar32 = new TCMarker();
-                tempVar32.ColumnPosition = 3;
+                tempVar32.columnPosition = 3;
                 return tempVar32;
             case "tcr3":
                 TCRMarker tempVar33 = new TCRMarker();
-                tempVar33.ColumnPosition = 3;
+                tempVar33.columnPosition = 3;
                 return tempVar33;
             case "usfm":
                 return new USFMMarker();
@@ -424,7 +424,7 @@ public class USFMParser {
                 return new SUPEndMarker();
             default:
                 UnknownMarker tempVar34 = new UnknownMarker();
-                tempVar34.ParsedIdentifier = identifier;
+                tempVar34.parsedIdentifier = identifier;
                 return tempVar34;
         }
     }

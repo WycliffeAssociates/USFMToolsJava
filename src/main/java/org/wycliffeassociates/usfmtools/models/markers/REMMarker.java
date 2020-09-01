@@ -1,18 +1,16 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-public class REMMarker extends Marker
-{
-	public String Comment;
-	@Override
-	public String getIdentifier()
-	{
-		return "rem";
-	}
+public class REMMarker extends Marker {
+    public String comment;
 
-	@Override
-	public String PreProcess(String input)
-	{
-		Comment = input.trim();
-		return "";
-	}
+    @Override
+    public String getIdentifier() {
+        return "rem";
+    }
+
+    @Override
+    public String preProcess(String input) {
+        comment = input.trim();
+        return "";
+    }
 }

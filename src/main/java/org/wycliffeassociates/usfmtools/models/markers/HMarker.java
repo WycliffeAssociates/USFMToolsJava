@@ -1,22 +1,19 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-/** 
- Running header marker
-*/
-public class HMarker extends Marker
-{
-	public String HeaderText;
-	@Override
-	public String getIdentifier()
-	{
-		return "h";
-	}
+/**
+ * Running header marker
+ */
+public class HMarker extends Marker {
+    public String headerText;
 
-	@Override
-	public String PreProcess(String input)
-	{
-		HeaderText = input.trim();
-		return "";
-	}
+    @Override
+    public String getIdentifier() {
+        return "h";
+    }
 
+    @Override
+    public String preProcess(String input) {
+        headerText = input.trim();
+        return "";
+    }
 }

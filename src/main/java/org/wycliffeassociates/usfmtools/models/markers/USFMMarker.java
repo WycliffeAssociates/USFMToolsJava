@@ -1,33 +1,30 @@
 package org.wycliffeassociates.usfmtools.models.markers;
 
-/** 
- Marker for USFM version
-*/
-public class USFMMarker extends Marker
-{
-	@Override
-	public String getIdentifier()
-	{
-		return "usfm";
-	}
+/**
+ * Marker for USFM version
+ */
+public class USFMMarker extends Marker {
+    @Override
+    public String getIdentifier() {
+        return "usfm";
+    }
 
-	/** 
-	 USFM Version
-	*/
-	private String Version;
-	public final String getVersion()
-	{
-		return Version;
-	}
-	public final void setVersion(String value)
-	{
-		Version = value;
-	}
+    /**
+     * USFM Version
+     */
+    private String version;
 
-	@Override
-	public String PreProcess(String input)
-	{
-		setVersion(input.trim());
-		return "";
-	}
+    public final String getVersion() {
+        return version;
+    }
+
+    public final void setVersion(String value) {
+        version = value;
+    }
+
+    @Override
+    public String preProcess(String input) {
+        setVersion(input.trim());
+        return "";
+    }
 }
