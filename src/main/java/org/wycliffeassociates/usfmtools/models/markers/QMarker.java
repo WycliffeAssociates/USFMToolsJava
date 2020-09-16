@@ -8,6 +8,7 @@ import java.util.*;
 public class QMarker extends Marker {
     public int depth = 1;
     public String Text;
+    public boolean isPoetryBlock;
 
     @Override
     public String getIdentifier() {

@@ -421,6 +421,24 @@ public class USFMParserTest {
         Assert.assertTrue(output.contents.get(0).contents.get(0) instanceof VMarker);
         Assert.assertTrue(output.contents.get(0).contents.get(0).contents.get(1) instanceof QMarker);
         Assert.assertTrue(output.contents.get(1) instanceof VMarker);
+
+        String secondVerseText = "\\v 1 This is verse one \\q another poetry \\v 2 second verse";
+
+        output = parser.parseFromString(secondVerseText);
+        Assert.assertEquals(2, output.contents.size());
+        Assert.assertTrue(output.contents.get(0) instanceof VMarker);
+        Assert.assertTrue(output.contents.get(0).contents.get(1) instanceof QMarker);
+        Assert.assertTrue(output.contents.get(1) instanceof VMarker);
+    }
+
+    @Test
+    public void TestEmptyQMarkerInVerse() {
+        String verseText = "\\v 1 This is verse one \\q \\v 2 second verse";
+        var output = parser.parseFromString(verseText);
+        Assert.assertEquals(2, output.contents.size());
+        Assert.assertTrue(output.contents.get(0) instanceof VMarker);
+        Assert.assertTrue(output.contents.get(1) instanceof QMarker && ((QMarker)output.contents.get(1)).isPoetryBlock);
+        Assert.assertTrue(output.contents.get(1).contents.get(0) instanceof VMarker);
     }
 
     @Test

@@ -21,6 +21,17 @@ public class VMarker extends Marker {
     }
 
     @Override
+    public boolean tryInsert(Marker input) {
+        if (input instanceof VMarker){
+            return false;
+        }
+        if (input instanceof QMarker && ((QMarker)input).isPoetryBlock) {
+            return false;
+        }
+        return super.tryInsert(input);
+    }
+
+    @Override
     public String getIdentifier() {
         return "v";
     }

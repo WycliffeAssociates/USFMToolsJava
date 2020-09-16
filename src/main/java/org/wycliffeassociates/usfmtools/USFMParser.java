@@ -6,12 +6,14 @@ import java.util.regex.Pattern;
 
 import org.wycliffeassociates.usfmtools.models.ConvertToMarkerResult;
 import org.wycliffeassociates.usfmtools.models.markers.*;
+import tangible.StringHelper;
 
 /**
  * Parses a USFM file into a Abstract Syntax Tree
  */
 public class USFMParser {
     private ArrayList<String> ignoredTags;
+    private static Pattern splitRegex = Pattern.compile("\\\\([a-z0-9\\-]*\\**)([^\\\\]*)");
 
     public USFMParser() {
         ignoredTags = new ArrayList<String>();
@@ -21,26 +23,57 @@ public class USFMParser {
         ignoredTags = tagsToIgnore;
     }
 
+
+    /**
+     * Parses a string into a USFMDocument
+     *
+     * @param input A USFM string
+     * @return A USFMDocument representing the input
+     */
     public final USFMDocument parseFromString(String input) {
-        Pattern splitRegex = Pattern.compile("\\\\([a-z0-9\\-]*\\**)([^\\\\]*)");
         USFMDocument output = new USFMDocument();
+        ArrayList<Marker> markers = tokenizeFromString(input);
+
+        for (Marker marker : markers) {
+            if (marker instanceof TRMarker && !output.getTypesPathToLastMarker().contains(TableBlock.class)) {
+                output.insert(new TableBlock());
+            }
+
+            int nextMarkerIndex = markers.indexOf(marker) + 1;
+            if (marker instanceof QMarker
+                    && markers.size() > nextMarkerIndex
+                    && markers.get(nextMarkerIndex) instanceof VMarker
+            ) {
+                output.insert(new TableBlock());
+            }
+
+            output.insert(marker);
+        }
+
+        return output;
+    }
+
+    /**
+     * Generate a list of Markers from a string
+     *
+     * @param input USFM String to tokenize
+     * @return A List of Markers based upon the string
+     */
+    private ArrayList<Marker> tokenizeFromString(String input) {
+        ArrayList<Marker> output = new ArrayList<>();
+
         Matcher match = splitRegex.matcher(input);
         while (match.find()) {
-            if (match.groupCount() > 1 && ignoredTags.contains(match.group(1))) {
+            if (ignoredTags.contains(match.group(1))) {
                 continue;
             }
 
             ConvertToMarkerResult result = convertToMarker(match.group(1), match.group(2));
             result.marker.setPosition(match.start());
+            output.add(result.marker);
 
-            if (result.marker instanceof TRMarker && !output.getTypesPathToLastMarker().contains(TableBlock.class)) {
-                output.insert(new TableBlock());
-            }
-
-            output.insert(result.marker);
-
-            if (!tangible.StringHelper.isNullOrWhiteSpace(result.remainingText)) {
-                output.insert(new TextBlock(result.remainingText));
+            if (!StringHelper.isNullOrWhiteSpace(result.remainingText)) {
+                output.add(new TextBlock(result.remainingText));
             }
         }
 
