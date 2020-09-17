@@ -44,7 +44,7 @@ public class USFMParser {
                     && markers.size() > nextMarkerIndex
                     && markers.get(nextMarkerIndex) instanceof VMarker
             ) {
-                output.insert(new TableBlock());
+                ((QMarker) marker).isPoetryBlock = true;
             }
 
             output.insert(marker);
