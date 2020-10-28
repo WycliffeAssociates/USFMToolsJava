@@ -483,4 +483,15 @@ public class USFMParserTest {
     private void isInstanceOfType(Object obj, Class clazz) {
         Assert.assertThat(obj, instanceOf(clazz));
     }
+
+    /**
+     * Verify that if a \q marker is at the end of a string it doesn't throw an exception
+     */
+    @Test
+    public void TestTrailingEmptyQMarker()
+    {
+        String verseText = "\\q";
+        var output = parser.parseFromString(verseText);
+        isInstanceOfType(output.contents.get(0), QMarker.class);
+    }
 }
