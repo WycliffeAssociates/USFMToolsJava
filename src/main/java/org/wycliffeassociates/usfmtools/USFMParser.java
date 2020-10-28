@@ -455,6 +455,8 @@ public class USFMParser {
                 return new SUPMarker();
             case "sup*":
                 return new SUPEndMarker();
+            case "ie":
+                return new IEMarker();
             default:
                 UnknownMarker tempVar34 = new UnknownMarker();
                 tempVar34.parsedIdentifier = identifier;

@@ -15,6 +15,18 @@ public class PMarker extends Marker {
 
     @Override
     public ArrayList<java.lang.Class> getAllowedContents() {
-        return new ArrayList<java.lang.Class>(Arrays.asList(VMarker.class, BMarker.class, SPMarker.class, TextBlock.class, FMarker.class, FEndMarker.class, LIMarker.class, QMarker.class));
+        return new ArrayList<java.lang.Class>(
+                Arrays.asList(
+                        VMarker.class,
+                        BMarker.class,
+                        SPMarker.class,
+                        TextBlock.class,
+                        FMarker.class,
+                        FEndMarker.class,
+                        LIMarker.class,
+                        QMarker.class,
+                        XMarker.class
+                )
+        );
     }
 }

@@ -494,4 +494,15 @@ public class USFMParserTest {
         var output = parser.parseFromString(verseText);
         isInstanceOfType(output.contents.get(0), QMarker.class);
     }
+
+    @Test
+    public void TestIntroParagraphs()
+    {
+        String text = "\\ip \\rq \\rq* \\ie";
+        var output = parser.parseFromString(text);
+        isInstanceOfType(output.contents.get(0), IPMarker.class);
+        isInstanceOfType(output.contents.get(0).contents.get(0), RQMarker.class);
+        isInstanceOfType(output.contents.get(0).contents.get(1), RQEndMarker.class);
+        isInstanceOfType(output.contents.get(0).contents.get(2), IEMarker.class);
+    }
 }
