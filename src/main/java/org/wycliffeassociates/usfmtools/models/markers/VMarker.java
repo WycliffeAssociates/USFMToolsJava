@@ -7,7 +7,7 @@ import java.util.regex.Pattern;
 public class VMarker extends Marker {
     // This is a string because of verse bridges. In the future this should have starting and ending verse
     public String verseNumber;
-    private static Pattern verseRegex = Pattern.compile("^ *([0-9]*-?[0-9]*) ?(.*)");
+    private static Pattern verseRegex = Pattern.compile("^ *([0-9]*-?[0-9]*) ?(.*)", Pattern.DOTALL);
     public int startingVerse;
     public int endingVerse;
 
