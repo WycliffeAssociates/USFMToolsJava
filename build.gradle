@@ -13,7 +13,7 @@ plugins {
 apply plugin: 'maven'
 
 group 'org.wycliffeassociates'
-version '1.5.2'
+version '1.5.3'
 
 repositories {
     jcenter()
