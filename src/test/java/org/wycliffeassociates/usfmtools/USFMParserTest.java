@@ -505,4 +505,23 @@ public class USFMParserTest {
         isInstanceOfType(output.contents.get(0).contents.get(1), RQEndMarker.class);
         isInstanceOfType(output.contents.get(0).contents.get(2), IEMarker.class);
     }
+
+    @Test
+    public void TestNewlineInTextBlock()
+    {
+        String verseText = "This is text \nwith a newline";
+        String verseText2 = "This is text \r\nwith a newline";
+        String usfm = "\\v 1 " + verseText;
+        String usfm2 = "\\v 1 " + verseText2;
+        var output = parser.parseFromString(usfm);
+        var output2 = parser.parseFromString(usfm2);
+
+        isInstanceOfType(output.contents.get(0), VMarker.class);
+        isInstanceOfType(output.contents.get(0).contents.get(0), TextBlock.class);
+        Assert.assertEquals(verseText, ((TextBlock)output.contents.get(0).contents.get(0)).text);
+
+        isInstanceOfType(output2.contents.get(0), VMarker.class);
+        isInstanceOfType(output2.contents.get(0).contents.get(0), TextBlock.class);
+        Assert.assertEquals(verseText2, ((TextBlock)output2.contents.get(0).contents.get(0)).text);
+    }
 }

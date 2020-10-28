@@ -8,7 +8,7 @@ import java.util.regex.Pattern;
  * Chapter marker
  */
 public class CMarker extends Marker {
-    private static Pattern regex = Pattern.compile(" *(\\d*) *(.*)");
+    private static Pattern regex = Pattern.compile(" *(\\d*) *(.*)", Pattern.DOTALL);
     public int number;
 
     public final String getPublishedChapterMarker() {

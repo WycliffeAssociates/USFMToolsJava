@@ -13,7 +13,7 @@ import tangible.StringHelper;
  */
 public class USFMParser {
     private ArrayList<String> ignoredTags;
-    private static Pattern splitRegex = Pattern.compile("\\\\([a-z0-9\\-]*\\**)([^\\\\]*)");
+    private static Pattern splitRegex = Pattern.compile("\\\\([a-z0-9\\-]*\\**)([^\\\\]*)", Pattern.DOTALL);
 
     public USFMParser() {
         ignoredTags = new ArrayList<String>();
