@@ -306,6 +306,8 @@ public class USFMParser {
                 return new FTMarker();
             case "fr":
                 return new FRMarker();
+            case "fr*":
+                return new FREndMarker();
             case "fk":
                 return new FKMarker();
             case "fv":
