@@ -33,6 +33,7 @@ public class FMarker extends Marker {
                         FQAMarker.class,
                         FQAEndMarker.class,
                         FQMarker.class,
+                        FQEndMarker.class,
                         TLMarker.class,
                         TLEndMarker.class,
                         WMarker.class,

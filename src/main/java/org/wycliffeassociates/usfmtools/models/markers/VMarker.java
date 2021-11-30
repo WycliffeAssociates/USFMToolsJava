@@ -22,10 +22,10 @@ public class VMarker extends Marker {
 
     @Override
     public boolean tryInsert(Marker input) {
-        if (input instanceof VMarker){
+        if (input instanceof VMarker) {
             return false;
         }
-        if (input instanceof QMarker && ((QMarker)input).isPoetryBlock) {
+        if (input instanceof QMarker && ((QMarker) input).isPoetryBlock) {
             return false;
         }
         return super.tryInsert(input);
@@ -51,6 +51,65 @@ public class VMarker extends Marker {
 
     @Override
     public ArrayList<java.lang.Class> getAllowedContents() {
-        return new ArrayList<java.lang.Class>(Arrays.asList(VPMarker.class, VPEndMarker.class, TLMarker.class, TLEndMarker.class, ADDMarker.class, ADDEndMarker.class, BMarker.class, BKMarker.class, BKEndMarker.class, BDMarker.class, BDEndMarker.class, ITMarker.class, ITEndMarker.class, EMMarker.class, EMEndMarker.class, BDITMarker.class, BDITEndMarker.class, SUPMarker.class, SUPEndMarker.class, NOMarker.class, NOEndMarker.class, SCMarker.class, SCEndMarker.class, NDMarker.class, NDEndMarker.class, QMarker.class, MMarker.class, FMarker.class, FEndMarker.class, SPMarker.class, TextBlock.class, WMarker.class, WEndMarker.class, XMarker.class, XEndMarker.class, CLSMarker.class, RQMarker.class, RQEndMarker.class, PIMarker.class, MIMarker.class, QSMarker.class, QSEndMarker.class, QRMarker.class, QCMarker.class, QDMarker.class, QACMarker.class, QACEndMarker.class, SMarker.class, VAMarker.class, VAEndMarker.class));
+        return new ArrayList<java.lang.Class>(
+                Arrays.asList(
+                        VPMarker.class,
+                        VPEndMarker.class,
+                        TLMarker.class,
+                        TLEndMarker.class,
+                        ADDMarker.class,
+                        ADDEndMarker.class,
+                        BMarker.class,
+                        BKMarker.class,
+                        BKEndMarker.class,
+                        BDMarker.class,
+                        BDEndMarker.class,
+                        ITMarker.class,
+                        ITEndMarker.class,
+                        EMMarker.class,
+                        EMEndMarker.class,
+                        BDITMarker.class,
+                        BDITEndMarker.class,
+                        SUPMarker.class,
+                        SUPEndMarker.class,
+                        NOMarker.class,
+                        NOEndMarker.class,
+                        SCMarker.class,
+                        SCEndMarker.class,
+                        NDMarker.class,
+                        NDEndMarker.class,
+                        QMarker.class,
+                        MMarker.class,
+                        FMarker.class,
+                        FEndMarker.class,
+                        SPMarker.class,
+                        TextBlock.class,
+                        WMarker.class,
+                        WEndMarker.class,
+                        XMarker.class,
+                        XEndMarker.class,
+                        CLSMarker.class,
+                        RQMarker.class,
+                        RQEndMarker.class,
+                        PIMarker.class,
+                        MIMarker.class,
+                        QSMarker.class,
+                        QSEndMarker.class,
+                        QRMarker.class,
+                        QCMarker.class,
+                        QDMarker.class,
+                        QACMarker.class,
+                        QACEndMarker.class,
+                        SMarker.class,
+                        VAMarker.class,
+                        VAEndMarker.class,
+                        FIGMarker.class,
+                        FIGEndMarker.class,
+                        PNMarker.class,
+                        PNEndMarker.class,
+                        PROMarker.class,
+                        PROEndMarker.class
+                )
+        );
     }
 }
