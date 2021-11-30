@@ -3,32 +3,23 @@ package org.wycliffeassociates.usfmtools.models.markers;
 import java.util.ArrayList;
 import java.util.Arrays;
 
-/**
- * Acrostic heading for poetry
- */
-public class QAMarker extends Marker {
-    /**
-     * Heading for the poetry
-     */
-    public String heading;
-
+public class WGMarker extends Marker {
     @Override
     public String getIdentifier() {
-        return "qa";
+        return "wg";
     }
 
     @Override
-    public String preProcess(String input) {
-        heading = input.trim();
-        return "";
+    public String preProcess(String input)
+    {
+        return input.trim();
     }
 
     @Override
     public ArrayList<Class> getAllowedContents() {
         return new ArrayList<java.lang.Class>(
                 Arrays.asList(
-                        QACMarker.class,
-                        QACEndMarker.class
+                        TextBlock.class
                 )
         );
     }

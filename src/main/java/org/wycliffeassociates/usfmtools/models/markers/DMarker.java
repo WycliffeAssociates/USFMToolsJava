@@ -21,6 +21,15 @@ public class DMarker extends Marker {
 
     @Override
     public ArrayList<java.lang.Class> getAllowedContents() {
-        return new ArrayList<java.lang.Class>(Arrays.asList(FMarker.class, FEndMarker.class));
+        return new ArrayList<java.lang.Class>(
+                Arrays.asList(
+                        FMarker.class,
+                        FEndMarker.class,
+                        FEndMarker.class,
+                        ITMarker.class,
+                        ITEndMarker.class,
+                        TextBlock.class
+                )
+        );
     }
 }

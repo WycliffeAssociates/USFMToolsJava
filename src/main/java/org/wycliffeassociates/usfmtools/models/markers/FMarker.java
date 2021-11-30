@@ -38,7 +38,17 @@ public class FMarker extends Marker {
                         TLEndMarker.class,
                         WMarker.class,
                         WEndMarker.class,
-                        TextBlock.class
+                        TextBlock.class,
+                        ITMarker.class,
+                        ITEndMarker.class,
+                        SCMarker.class,
+                        SCEndMarker.class,
+                        SUPMarker.class,
+                        SUPEndMarker.class,
+                        BKMarker.class,
+                        BKEndMarker.class,
+                        BDMarker.class,
+                        BDEndMarker.class
                 )
         );
     }
