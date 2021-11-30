@@ -524,4 +524,75 @@ public class USFMParserTest {
         isInstanceOfType(output2.contents.get(0).contents.get(0), TextBlock.class);
         Assert.assertEquals(verseText2, ((TextBlock)output2.contents.get(0).contents.get(0)).text);
     }
+
+    @Test
+    public void TestFigureParse()
+    {
+        //PRE 3.0 TESTS
+        //Description;
+        Assert.assertEquals("description", ((FIGMarker)parser.parseFromString
+                ("\\fig description|filepath|width|location|copyright|caption caption caption|reference\\fig*").contents.get(0)).description);
+        //FilePath;
+        Assert.assertEquals("filepath", ((FIGMarker)parser.parseFromString
+                ("\\fig description| filepath|width|location|copyright|caption caption caption|reference\\fig*").contents.get(0)).filePath);
+        //Width;
+        Assert.assertEquals("width", ((FIGMarker)parser.parseFromString
+                ("\\fig description|filepath |width|location|copyright|caption caption caption|reference\\fig*").contents.get(0)).width);
+        //Location;
+        Assert.assertEquals("location", ((FIGMarker)parser.parseFromString
+                ("\\fig description|filepath|width | location|copyright|caption caption caption|reference\\fig*").contents.get(0)).location);
+        //Copyright;
+        Assert.assertEquals("copyright", ((FIGMarker)parser.parseFromString
+                ("\\fig description|filepath|width|location|copyright |caption caption caption|reference\\fig*").contents.get(0)).copyright);
+        //Caption;
+        Assert.assertEquals("caption caption caption", ((FIGMarker)parser.parseFromString
+                ("\\fig description|filepath|width|location|copyright|caption caption caption|reference\\fig*").contents.get(0)).caption);
+        //Reference;
+        Assert.assertEquals("reference", ((FIGMarker)parser.parseFromString
+                ("\\fig description|filepath|width|location|copyright|caption caption caption | reference\\fig*").contents.get(0)).reference);
+
+        //3.0 TESTS
+        //Caption;
+        Assert.assertEquals("caption caption caption", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).caption);
+        //Description;
+        Assert.assertEquals("description", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).description);
+        //FilePath;
+        Assert.assertEquals("filepath", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).filePath);
+        //Width;
+        Assert.assertEquals("width", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).width);
+        //Location;
+        Assert.assertEquals("location", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).location);
+        //Copyright;
+        Assert.assertEquals("copyright", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).copyright);
+        //Reference;
+        Assert.assertEquals("reference", ((FIGMarker)parser.parseFromString
+                ("\\fig caption caption caption | alt=\"description\" src=\"filepath\" size=\"width\" loc =\"location\" " +
+                        "copy= \"copyright\"  ref = \"reference\"\\fig*").contents.get(0)).reference);
+
+
+
+        // Cross Reference Caller
+        Assert.assertEquals("-", ((XMarker)parser.parseFromString("\\x - \\xo 11.21 \\xq Tebes \\xt \\x*").contents.get(0)).crossRefCaller);
+
+        // Cross Reference Origin
+        Assert.assertEquals("11.21", ((XOMarker)parser.parseFromString("\\x - \\xo 11.21 \\xq Tebes \\xt \\x*").contents.get(0).contents.get(0)).originRef);
+
+        // Cross Reference Target
+        Assert.assertEquals("Mrk 1.24; Luk 2.39; Jhn 1.45.", ((TextBlock)parser.parseFromString("\\x - \\xo 11.21 \\xq Tebes \\xt Mrk 1.24; Luk 2.39; Jhn 1.45.\\x*").contents.get(0).contents.get(2).contents.get(0)).text);
+
+        // Cross Reference Quotation
+        Assert.assertEquals("Tebes", ((TextBlock)parser.parseFromString("\\x - \\xo 11.21 \\xq Tebes \\xt \\x*").contents.get(0).contents.get(1).contents.get(0)).text);
+    }
 }

@@ -289,6 +289,8 @@ public class USFMParser {
                 return new FQAEndMarker();
             case "fq":
                 return new FQMarker();
+            case "fq*":
+                return new FQEndMarker();
             case "pi":
             case "pi1":
                 return new PIMarker();
@@ -459,6 +461,21 @@ public class USFMParser {
                 return new SUPEndMarker();
             case "ie":
                 return new IEMarker();
+            case "pn":
+                return new PNMarker();
+            case "pn*":
+                return new PNEndMarker();
+            case "pro":
+                return new PROMarker();
+            case "pro*":
+                return new PROEndMarker();
+
+            /* Special Features */
+            case "fig":
+                return new FIGMarker();
+            case "fig*":
+                return new FIGEndMarker();
+
             default:
                 UnknownMarker tempVar34 = new UnknownMarker();
                 tempVar34.parsedIdentifier = identifier;
