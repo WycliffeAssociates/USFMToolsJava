@@ -13,16 +13,25 @@ import tangible.StringHelper;
  */
 public class USFMParser {
     private ArrayList<String> ignoredTags;
+    private Boolean ignoreUnknownMarkers;
+
     private static Pattern splitRegex = Pattern.compile("\\\\([a-z0-9\\-]*\\**)([^\\\\]*)", Pattern.DOTALL);
 
     public USFMParser() {
-        ignoredTags = new ArrayList<String>();
+        this(null, false);
     }
 
     public USFMParser(ArrayList<String> tagsToIgnore) {
-        ignoredTags = tagsToIgnore;
+        this(tagsToIgnore, false);
     }
 
+    public USFMParser(ArrayList<String> tagsToIgnore, Boolean ignoreUnknownMarkers) {
+        this.ignoredTags = tagsToIgnore;
+        if (this.ignoredTags == null) {
+            this.ignoredTags = new ArrayList<>();
+        }
+        this.ignoreUnknownMarkers = ignoreUnknownMarkers;
+    }
 
     /**
      * Parses a string into a USFMDocument
@@ -34,7 +43,10 @@ public class USFMParser {
         USFMDocument output = new USFMDocument();
         ArrayList<Marker> markers = tokenizeFromString(input);
 
-        for (Marker marker : markers) {
+        markers = cleanWhitespace(markers);
+
+        for (int markerIndex = 0; markerIndex < markers.size(); markerIndex++) {
+            Marker marker = markers.get(markerIndex);
             if (marker instanceof TRMarker && !output.getTypesPathToLastMarker().contains(TableBlock.class)) {
                 output.insert(new TableBlock());
             }
@@ -53,6 +65,39 @@ public class USFMParser {
         return output;
     }
 
+    /// <summary>
+    /// Removes all the unessecary whitespace while preserving space between closing markers and opening markers
+    /// </summary>
+    /// <param name="input"></param>
+    private ArrayList<Marker> cleanWhitespace(List<Marker> input) {
+        var output = new ArrayList<Marker>();
+        for (var index = 0; index < input.size(); index++) {
+            if (!(input.get(index) instanceof TextBlock && StringHelper.isNullOrWhiteSpace((((TextBlock) input.get(index)).text)))) {
+                output.add(input.get(index));
+                continue;
+            }
+
+            // If this is an empty text block at the beginning remove it
+            if (index == 0) {
+                continue;
+            }
+
+            // If this is an empty text block at the end then remove it
+            if (index == input.size() - 1) {
+                continue;
+            }
+
+            // If this isn't between and end marker and another marker then delete it
+            if (!(input.get(index - 1).getIdentifier().endsWith("*") && !input.get(index + 1).getIdentifier().endsWith("*"))) {
+                continue;
+            }
+
+            output.add(input.get(index));
+        }
+        return output;
+    }
+
+
     /**
      * Generate a list of Markers from a string
      *
@@ -70,9 +115,13 @@ public class USFMParser {
 
             ConvertToMarkerResult result = convertToMarker(match.group(1), match.group(2));
             result.marker.setPosition(match.start());
-            output.add(result.marker);
 
-            if (!StringHelper.isNullOrWhiteSpace(result.remainingText)) {
+            // If this is an unkown marker and we're in Ignore Unkown Marker mode then don't add the marker. We still keep any remaining text though
+            if (!(result.marker instanceof UnknownMarker) || !ignoreUnknownMarkers) {
+                output.add(result.marker);
+            }
+
+            if (!StringHelper.isNullOrEmpty(result.remainingText)) {
                 output.add(new TextBlock(result.remainingText));
             }
         }
@@ -229,6 +278,10 @@ public class USFMParser {
                 QMarker tempVar14 = new QMarker();
                 tempVar14.depth = 3;
                 return tempVar14;
+            case "q4":
+                QMarker tempVar15 = new QMarker();
+                tempVar15.depth = 4;
+                return tempVar15;
             case "qr":
                 return new QRMarker();
             case "qc":
@@ -241,17 +294,17 @@ public class USFMParser {
                 return new QACEndMarker();
             case "qm":
             case "qm1":
-                QMMarker tempVar15 = new QMMarker();
-                tempVar15.depth = 1;
-                return tempVar15;
-            case "qm2":
                 QMMarker tempVar16 = new QMMarker();
-                tempVar16.depth = 2;
+                tempVar16.depth = 1;
                 return tempVar16;
-            case "qm3":
+            case "qm2":
                 QMMarker tempVar17 = new QMMarker();
-                tempVar17.depth = 3;
+                tempVar17.depth = 2;
                 return tempVar17;
+            case "qm3":
+                QMMarker tempVar18 = new QMMarker();
+                tempVar18.depth = 3;
+                return tempVar18;
             case "m":
                 return new MMarker();
             case "d":
@@ -260,13 +313,13 @@ public class USFMParser {
             case "ms1":
                 return new MSMarker();
             case "ms2":
-                MSMarker tempVar18 = new MSMarker();
-                tempVar18.weight = 2;
-                return tempVar18;
-            case "ms3":
                 MSMarker tempVar19 = new MSMarker();
-                tempVar19.weight = 3;
+                tempVar19.weight = 2;
                 return tempVar19;
+            case "ms3":
+                MSMarker tempVar20 = new MSMarker();
+                tempVar20.weight = 3;
+                return tempVar20;
             case "mr":
                 return new MRMarker();
             case "cl":
@@ -295,13 +348,13 @@ public class USFMParser {
             case "pi1":
                 return new PIMarker();
             case "pi2":
-                PIMarker tempVar20 = new PIMarker();
-                tempVar20.depth = 2;
-                return tempVar20;
-            case "pi3":
                 PIMarker tempVar21 = new PIMarker();
-                tempVar21.depth = 3;
+                tempVar21.depth = 2;
                 return tempVar21;
+            case "pi3":
+                PIMarker tempVar22 = new PIMarker();
+                tempVar22.depth = 3;
+                return tempVar22;
             case "sp":
                 return new SPMarker();
             case "ft":
@@ -334,13 +387,21 @@ public class USFMParser {
             case "s1":
                 return new SMarker();
             case "s2":
-                SMarker tempVar22 = new SMarker();
-                tempVar22.weight = 2;
-                return tempVar22;
-            case "s3":
                 SMarker tempVar23 = new SMarker();
-                tempVar23.weight = 3;
+                tempVar23.weight = 2;
                 return tempVar23;
+            case "s3":
+                SMarker tempVar24 = new SMarker();
+                tempVar24.weight = 3;
+                return tempVar24;
+            case "s4":
+                SMarker tempVar26 = new SMarker();
+                tempVar26.weight = 4;
+                return tempVar26;
+            case "s5":
+                SMarker tempVar27 = new SMarker();
+                tempVar27.weight = 5;
+                return tempVar27;
             case "bk":
                 return new BKMarker();
             case "bk*":
@@ -349,13 +410,13 @@ public class USFMParser {
             case "li1":
                 return new LIMarker();
             case "li2":
-                LIMarker tempVar24 = new LIMarker();
-                tempVar24.depth = 2;
-                return tempVar24;
+                LIMarker tempVar28 = new LIMarker();
+                tempVar28.depth = 2;
+                return tempVar28;
             case "li3":
-                LIMarker tempVar25 = new LIMarker();
-                tempVar25.depth = 3;
-                return tempVar25;
+                LIMarker tempVar29 = new LIMarker();
+                tempVar29.depth = 3;
+                return tempVar29;
             case "add":
                 return new ADDMarker();
             case "add*":
@@ -401,41 +462,41 @@ public class USFMParser {
             case "thr1":
                 return new THRMarker();
             case "th2":
-                THMarker tempVar26 = new THMarker();
-                tempVar26.columnPosition = 2;
-                return tempVar26;
+                THMarker tempVar30 = new THMarker();
+                tempVar30.columnPosition = 2;
+                return tempVar30;
             case "thr2":
-                THRMarker tempVar27 = new THRMarker();
-                tempVar27.columnPosition = 2;
-                return tempVar27;
+                THRMarker tempVar31 = new THRMarker();
+                tempVar31.columnPosition = 2;
+                return tempVar31;
             case "th3":
-                THMarker tempVar28 = new THMarker();
-                tempVar28.columnPosition = 3;
-                return tempVar28;
+                THMarker tempVar32 = new THMarker();
+                tempVar32.columnPosition = 3;
+                return tempVar32;
             case "thr3":
-                THRMarker tempVar29 = new THRMarker();
-                tempVar29.columnPosition = 3;
-                return tempVar29;
+                THRMarker tempVar33 = new THRMarker();
+                tempVar33.columnPosition = 3;
+                return tempVar33;
             case "tc1":
                 return new TCMarker();
             case "tcr1":
                 return new TCRMarker();
             case "tc2":
-                TCMarker tempVar30 = new TCMarker();
-                tempVar30.columnPosition = 2;
-                return tempVar30;
+                TCMarker tempVar34 = new TCMarker();
+                tempVar34.columnPosition = 2;
+                return tempVar34;
             case "tcr2":
-                TCRMarker tempVar31 = new TCRMarker();
-                tempVar31.columnPosition = 2;
-                return tempVar31;
+                TCRMarker tempVar35 = new TCRMarker();
+                tempVar35.columnPosition = 2;
+                return tempVar35;
             case "tc3":
-                TCMarker tempVar32 = new TCMarker();
-                tempVar32.columnPosition = 3;
-                return tempVar32;
+                TCMarker tempVar36 = new TCMarker();
+                tempVar36.columnPosition = 3;
+                return tempVar36;
             case "tcr3":
-                TCRMarker tempVar33 = new TCRMarker();
-                tempVar33.columnPosition = 3;
-                return tempVar33;
+                TCRMarker tempVar37 = new TCRMarker();
+                tempVar37.columnPosition = 3;
+                return tempVar37;
             case "usfm":
                 return new USFMMarker();
             /* Character Styles */
@@ -451,6 +512,72 @@ public class USFMParser {
                 return new NOMarker();
             case "no*":
                 return new NOEndMarker();
+            case "k":
+                return new KMarker();
+            case "k*":
+                return new KEndMarker();
+            case "lf":
+                return new LFMarker();
+            case "lik":
+                return new LIKMarker();
+            case "lik*":
+                return new LIKEndMarker();
+            case "litl":
+                return new LITLMarker();
+            case "litl*":
+                return new LITLEndMarker();
+            case "liv":
+                return new LIVMarker();
+            case "liv*":
+                return new LIVEndMarker();
+            case "ord":
+                return new ORDMarker();
+            case "ord*":
+                return new ORDEndMarker();
+            case "pmc":
+                return new PMCMarker();
+            case "pmo":
+                return new PMOMarker();
+            case "pmr":
+                return new PMRMarker();
+            case "png":
+                return new PNGMarker();
+            case "png*":
+                return new PNGEndMarker();
+            case "pr":
+                return new PRMarker();
+            case "qt":
+                return new QTMarker();
+            case "qt*":
+                return new QTEndMarker();
+            case "rb":
+                return new RBMarker();
+            case "rb*":
+                return new RBEndMarker();
+            case "sig":
+                return new SIGMarker();
+            case "sig*":
+                return new SIGEndMarker();
+            case "sls":
+                return new SLSMarker();
+            case "sls*":
+                return new SLSEndMarker();
+            case "wa":
+                return new WAMarker();
+            case "wa*":
+                return new WAEndMarker();
+            case "wg":
+                return new WGMarker();
+            case "wg*":
+                return new WGEndMarker();
+            case "wh":
+                return new WHMarker();
+            case "wh*":
+                return new WHEndMarker();
+            case "wj":
+                return new WJMarker();
+            case "wj*":
+                return new WJEndMarker();
             case "nd":
                 return new NDMarker();
             case "nd*":
@@ -477,9 +604,9 @@ public class USFMParser {
                 return new FIGEndMarker();
 
             default:
-                UnknownMarker tempVar34 = new UnknownMarker();
-                tempVar34.parsedIdentifier = identifier;
-                return tempVar34;
+                UnknownMarker tempVar38 = new UnknownMarker();
+                tempVar38.parsedIdentifier = identifier;
+                return tempVar38;
         }
     }
 }

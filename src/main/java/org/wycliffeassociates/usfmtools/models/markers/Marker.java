@@ -107,11 +107,10 @@ public abstract class Marker {
             return output;
         }
 
-        output.add(target);
         for (StackItem i : parents) {
             output.add(i.marker);
         }
-        Collections.reverse(output);
+        output.add(target);
         return output;
     }
 
@@ -136,11 +135,10 @@ public abstract class Marker {
             var isLastInParent = temp.isLastInParent;
             if (targets.contains(marker)) {
                 var tmp = new ArrayList<Marker>(parents.size() + 1);
-                tmp.add(marker);
                 for (StackItem i : parents) {
                     tmp.add(i.marker);
                 }
-                Collections.reverse(tmp);
+                tmp.add(marker);
                 output.put(marker, tmp);
                 if (output.size() == targets.size()) {
                     break;
@@ -185,7 +183,7 @@ public abstract class Marker {
      *
      * @return
      */
-    public final <T extends Marker> ArrayList<T> getChildMarkers(Class<T> clazz, List<T> ignoredParents) {
+    public final <T extends Marker> ArrayList<T> getChildMarkers(Class<T> clazz, List<Class> ignoredParents) {
         ArrayList<T> output = new ArrayList<T>();
         var stack = new Stack<Marker>();
         stack.addAll(contents);
