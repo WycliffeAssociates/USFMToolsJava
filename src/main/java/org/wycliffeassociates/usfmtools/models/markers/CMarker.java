@@ -54,6 +54,43 @@ public class CMarker extends Marker {
 
     @Override
     public ArrayList<java.lang.Class> getAllowedContents() {
-        return new ArrayList<java.lang.Class>(Arrays.asList(MMarker.class, MSMarker.class, SMarker.class, BMarker.class, DMarker.class, VMarker.class, PMarker.class, PCMarker.class, CDMarker.class, CPMarker.class, DMarker.class, CLMarker.class, QMarker.class, QSMarker.class, QSEndMarker.class, QAMarker.class, QMarker.class, NBMarker.class, RMarker.class, LIMarker.class, TableBlock.class, MMarker.class, MIMarker.class, PIMarker.class, CAMarker.class, CAEndMarker.class, SPMarker.class, TextBlock.class));
+        return new ArrayList<java.lang.Class>(
+                Arrays.asList(
+                        MMarker.class,
+                        MSMarker.class,
+                        SMarker.class,
+                        BMarker.class,
+                        DMarker.class,
+                        VMarker.class,
+                        PMarker.class,
+                        PCMarker.class,
+                        CDMarker.class,
+                        CPMarker.class,
+                        DMarker.class,
+                        CLMarker.class,
+                        QMarker.class,
+                        QSMarker.class,
+                        QSEndMarker.class,
+                        QAMarker.class,
+                        QMarker.class,
+                        NBMarker.class,
+                        RMarker.class,
+                        LIMarker.class,
+                        TableBlock.class,
+                        MMarker.class,
+                        MIMarker.class,
+                        PIMarker.class,
+                        CAMarker.class,
+                        CAEndMarker.class,
+                        SPMarker.class,
+                        TextBlock.class,
+                        REMMarker.class,
+                        DMarker.class,
+                        VAMarker.class,
+                        VAEndMarker.class,
+                        FMarker.class,
+                        FEndMarker.class
+                )
+        );
     }
 }

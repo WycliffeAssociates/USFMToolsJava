@@ -6,6 +6,8 @@ import org.junit.Test;
 import org.wycliffeassociates.usfmtools.models.markers.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 
 import static org.hamcrest.CoreMatchers.instanceOf;
@@ -503,7 +505,7 @@ public class USFMParserTest {
         isInstanceOfType(output.contents.get(0), IPMarker.class);
         isInstanceOfType(output.contents.get(0).contents.get(0), RQMarker.class);
         isInstanceOfType(output.contents.get(0).contents.get(1), RQEndMarker.class);
-        isInstanceOfType(output.contents.get(0).contents.get(2), IEMarker.class);
+        isInstanceOfType(output.contents.get(0).contents.get(3), IEMarker.class);
     }
 
     @Test
@@ -594,5 +596,128 @@ public class USFMParserTest {
 
         // Cross Reference Quotation
         Assert.assertEquals("Tebes", ((TextBlock)parser.parseFromString("\\x - \\xo 11.21 \\xq Tebes \\xt \\x*").contents.get(0).contents.get(1).contents.get(0)).text);
+    }
+
+    @Test
+    public void TestSpacingBetweenWords()
+    {
+        var parsed = parser.parseFromString("\\v 21 Penduduk kota yang satu akan pergi \\em Emphasis \\em* \\em Second \\em*");
+        Assert.assertEquals(" ", ((TextBlock)parsed.contents.get(0).contents.get(3)).text);
+    }
+
+    @Test
+    public void TestIgnoreUnkownMarkers()
+    {
+        parser = new USFMParser(null, true);
+        var parsed = parser.parseFromString("\\v 1 Text \\unkown more text \\bd Text \\bd*");
+        Assert.assertEquals(1, parsed.contents.size());
+        Assert.assertEquals(3, parsed.contents.get(0).contents.size());
+    }
+
+    @Test
+    public void TestIgnoreParentsWhenGettingChildMarkers()
+    {
+        var result = parser.parseFromString("\\v 1 Text blocks \\f \\ft Text \\f*");
+        Assert.assertEquals(2, result.getChildMarkers(TextBlock.class).size());
+
+        Assert.assertEquals(1, result.getChildMarkers(TextBlock.class, Arrays.asList(FMarker.class)).size());
+    }
+
+    @Test
+    public void TestGetChildMarkers()
+    {
+        var result = parser.parseFromString("\\c 1 \\v 1 Text blocks \\f \\ft Text \\f* \\v 2 Third block \\c 2 \\v 1 Fourth block");
+        var markers = result.getChildMarkers(VMarker.class);
+        Assert.assertEquals(3, markers.size());
+        Assert.assertEquals("1", markers.get(0).verseNumber);
+        Assert.assertEquals("2", markers.get(1).verseNumber);
+        Assert.assertEquals("1", markers.get(2).verseNumber);
+    }
+
+    @Test
+    public void TestGetHierarchyToMarker()
+    {
+        var document = new USFMDocument();
+        var chapter = new CMarker();
+        chapter.number = 1;
+        var verse = new VMarker();
+        verse.verseNumber = "1";
+        var textblock = new TextBlock("Hello world");
+        document.insertMultiple(List.of(new Marker[]{chapter, verse, textblock}));
+        var result = document.getHierarchyToMarker(textblock);
+        Assert.assertEquals(document, result.get(0));
+        Assert.assertEquals(chapter, result.get(1));
+        Assert.assertEquals(verse, result.get(2));
+        Assert.assertEquals(textblock, result.get(3));
+
+        document = parser.parseFromString("\\c 1\\p \\v 1 Before \\f + \\ft In footnote \\f* After footnore");
+
+        var markers = document.getChildMarkers(TextBlock.class);
+        var baseMarker = document.contents.get(0).contents.get(0).contents.get(0);
+        var hierarchy = baseMarker.getHierarchyToMarker(markers.get(0));
+        checkTypeList(Arrays.asList(VMarker.class, TextBlock.class), hierarchy);
+        hierarchy = baseMarker.getHierarchyToMarker(markers.get(1));
+        checkTypeList(Arrays.asList(VMarker.class, FMarker.class, FTMarker.class, TextBlock.class), hierarchy);
+        hierarchy = baseMarker.getHierarchyToMarker(markers.get(2));
+        checkTypeList(Arrays.asList(VMarker.class, TextBlock.class), hierarchy);
+    }
+
+    private void checkTypeList(List<Class> types, List<Marker> markers)
+    {
+        for (var i = 0; i < types.size(); i++)
+        {
+            Assert.assertTrue(
+                    "Expected type " + types.get(i).getName() + " but got " + markers.get(i).getClass().getName() + " at index " + i,
+                    markers.get(i).getClass().isAssignableFrom(types.get(i))
+            );
+        }
+    }
+
+    @Test
+    public void TestGetHierarchyToMarkerWithNonExistantMarker()
+    {
+        var document = new USFMDocument();
+        var chapter = new CMarker();
+        chapter.number = 1;
+        var verse = new VMarker();
+        verse.verseNumber = "1";
+        var textblock = new TextBlock("Hello world");
+        var secondBlock = new TextBlock("Hello again");
+        document.insertMultiple(List.of(new Marker[] { chapter, verse, textblock }));
+        var result = document.getHierarchyToMarker(secondBlock);
+        Assert.assertEquals(0, result.size());
+    }
+
+    @Test
+    public void TestGetHierarchyToMultipleMarkers()
+    {
+        var document = new USFMDocument();
+        var chapter = new CMarker();
+        chapter.number = 1;
+        var verse = new VMarker();
+        verse.verseNumber = "1";
+        var textblock = new TextBlock("Hello world");
+        var footnote = new FMarker();
+        var footnoteText = new FTMarker();
+        var footnoteEndMarker = new FEndMarker();
+        var textInFootnote = new TextBlock("Text in footnote");
+        var secondBlock = new TextBlock("Hello again");
+        var nonExistant = new VMarker();
+        document.insertMultiple(List.of(new Marker[] { chapter, verse, textblock, footnote, footnoteText, textInFootnote, footnoteEndMarker, secondBlock }));
+        var result = document.getHierachyToMultipleMarkers(Arrays.asList(textblock, secondBlock, nonExistant, textInFootnote));
+        Assert.assertEquals(document, result.get(textblock).get(0));
+        Assert.assertEquals(chapter, result.get(textblock).get(1));
+        Assert.assertEquals(verse, result.get(textblock).get(2));
+        Assert.assertEquals(textblock, result.get(textblock).get(3));
+        Assert.assertEquals(document, result.get(secondBlock).get(0));
+        Assert.assertEquals(chapter, result.get(secondBlock).get(1));
+        Assert.assertEquals(verse, result.get(secondBlock).get(2));
+        Assert.assertEquals(secondBlock, result.get(secondBlock).get(3));
+        Assert.assertEquals(0, result.get(nonExistant).size());
+        Assert.assertEquals(document, result.get(textInFootnote).get(0));
+        Assert.assertEquals(chapter, result.get(textInFootnote).get(1));
+        Assert.assertEquals(verse, result.get(textInFootnote).get(2));
+        Assert.assertEquals(footnote, result.get(textInFootnote).get(3));
+        Assert.assertEquals(footnoteText, result.get(textInFootnote).get(4));
     }
 }
