@@ -186,11 +186,12 @@ public abstract class Marker {
     public final <T extends Marker> ArrayList<T> getChildMarkers(Class<T> clazz, List<Class> ignoredParents) {
         ArrayList<T> output = new ArrayList<T>();
         var stack = new Stack<Marker>();
-        stack.addAll(contents);
 
-        if (ignoredParents != null && ignoredParents.contains(clazz)) {
+        if (ignoredParents != null && ignoredParents.contains(this.getClass())) {
             return output;
         }
+
+        stack.push(this);
 
         while (stack.size() > 0) {
             var marker = stack.pop();
