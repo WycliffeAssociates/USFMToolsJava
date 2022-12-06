@@ -187,7 +187,7 @@ public abstract class Marker {
         ArrayList<T> output = new ArrayList<T>();
         var stack = new Stack<Marker>();
 
-        if (ignoredParents != null && ignoredParents.contains(clazz)) {
+        if (ignoredParents != null && ignoredParents.contains(this.getClass())) {
             return output;
         }
 
