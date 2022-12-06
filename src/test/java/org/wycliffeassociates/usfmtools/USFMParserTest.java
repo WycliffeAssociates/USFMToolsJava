@@ -617,10 +617,15 @@ public class USFMParserTest {
     @Test
     public void TestIgnoreParentsWhenGettingChildMarkers()
     {
+        List<Class> ignoredParents = Arrays.asList(FMarker.class);
         var result = parser.parseFromString("\\v 1 Text blocks \\f \\ft Text \\f*");
         Assert.assertEquals(2, result.getChildMarkers(TextBlock.class).size());
+        Assert.assertEquals(1, result.getChildMarkers(TextBlock.class, ignoredParents).size());
 
-        Assert.assertEquals(1, result.getChildMarkers(TextBlock.class, Arrays.asList(FMarker.class)).size());
+        var verse = result.getChildMarkers(VMarker.class).get(0);
+        Assert.assertEquals(2, verse.getChildMarkers(TextBlock.class).size());
+        Assert.assertEquals(1, verse.getChildMarkers(TextBlock.class, ignoredParents).size());
+        Assert.assertEquals(0, verse.getChildMarkers(TextBlock.class, Arrays.asList(VMarker.class)).size());
     }
 
     @Test
