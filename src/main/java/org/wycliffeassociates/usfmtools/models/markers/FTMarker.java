@@ -17,9 +17,6 @@ public class FTMarker extends Marker {
     public ArrayList<java.lang.Class> getAllowedContents() {
         return new ArrayList<java.lang.Class>(
                 Arrays.asList(
-                        FQAMarker.class,
-                        FQAEndMarker.class,
-                        FQMarker.class,
                         TLMarker.class,
                         TLEndMarker.class,
                         WMarker.class,
