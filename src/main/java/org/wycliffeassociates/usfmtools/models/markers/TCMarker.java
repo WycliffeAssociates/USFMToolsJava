@@ -19,7 +19,7 @@ public class TCMarker extends Marker {
     }
 
     @Override
-    public ArrayList<java.lang.Class> getAllowedContents() {
-        return new ArrayList<java.lang.Class>(Arrays.asList(TextBlock.class, VMarker.class));
+    public ArrayList<Class> getAllowedContents() {
+        return new ArrayList(Arrays.asList(TextBlock.class));
     }
 }

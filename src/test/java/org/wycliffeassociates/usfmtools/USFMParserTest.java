@@ -253,7 +253,7 @@ public class USFMParserTest {
         Assert.assertEquals(2, ((TCRMarker) parser.parseFromString("\\tr \\tc1 dari suku Ruben \\tcr2 12.000").contents.get(0).contents.get(0).contents.get(1)).columnPosition);
         Assert.assertEquals(3, ((TCRMarker) parser.parseFromString("\\tr \\tc1 dari suku Ruben \\tcr3 12.000").contents.get(0).contents.get(0).contents.get(1)).columnPosition);
         // Embedded Verse
-        Assert.assertEquals("6", ((VMarker) parser.parseFromString("\\tc1 \\v 6 dari suku Asyer").contents.get(0).contents.get(0)).verseNumber);
+        Assert.assertTrue(parser.parseFromString("\\tc1 \\v 6 dari suku Asyer").contents.get(1) instanceof VMarker);
         // Table Headers
         Assert.assertEquals("dari suku Ruben", ((TextBlock) parser.parseFromString("\\tr \\th1 dari suku Ruben \\thr2 12.000").contents.get(0).contents.get(0).contents.get(0).contents.get(0)).text);
         Assert.assertEquals("12.000", ((TextBlock) parser.parseFromString("\\tr \\th1 dari suku Ruben \\thr2 12.000").contents.get(0).contents.get(0).contents.get(1).contents.get(0)).text);
