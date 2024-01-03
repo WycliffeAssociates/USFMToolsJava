@@ -10,7 +10,7 @@ import java.util.regex.Pattern;
 public class WMarker extends Marker {
     public String term;
     public HashMap<String, String> attributes;
-    private static Pattern wordAttrPattern = Pattern.compile("([\\w-]+)=?\"?([\\w,:.]*)\"?", Pattern.DOTALL);
+    private static Pattern wordAttrPattern = Pattern.compile("([\\w-]+)=?\"?([\\w,:.\\p{InGreek}]*)\"?", Pattern.DOTALL);
 
     @Override
     public String getIdentifier() {
