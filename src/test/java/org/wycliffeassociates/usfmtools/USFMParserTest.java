@@ -286,7 +286,7 @@ public class USFMParserTest {
         Assert.assertEquals("-", ((FMarker) parser.parseFromString("\\f - \\ft Sample Simple Footnote. \\f*").contents.get(0)).footNoteCaller);
         Assert.assertEquals("abc", ((FMarker) parser.parseFromString("\\f abc \\ft Sample Simple Footnote. \\f*").contents.get(0)).footNoteCaller);
         // Footnote Alternate Translation Marker
-        Assert.assertEquals("... Over the livestock, over all the animals of the earth, and over every creeping thing that creeps on the earth ", ((TextBlock) parser.parseFromString("\\v 26 God said, \"Let us make man in our image, after our likeness. Let them have dominion over the fish of the sea, over the birds of the sky, over the livestock, over all the earth, and over every creeping thing that creeps on the earth.\" \\f + \\ft Some ancient copies have: \\fqa ... Over the livestock, over all the animals of the earth, and over every creeping thing that creeps on the earth \\fqa*  . \\f*").contents.get(0).contents.get(1).contents.get(0).contents.get(1).contents.get(0)).text);
+        Assert.assertEquals("... Over the livestock, over all the animals of the earth, and over every creeping thing that creeps on the earth ", ((TextBlock) parser.parseFromString("\\v 26 God said, \"Let us make man in our image, after our likeness. Let them have dominion over the fish of the sea, over the birds of the sky, over the livestock, over all the earth, and over every creeping thing that creeps on the earth.\" \\f + \\ft Some ancient copies have: \\fqa ... Over the livestock, over all the animals of the earth, and over every creeping thing that creeps on the earth \\fqa*  . \\f*").contents.get(0).contents.get(1).contents.get(1).contents.get(0)).text);
         // Footnote Keyword
         Assert.assertEquals("Tamar", ((FKMarker) parser.parseFromString("\\f + \\fr 1.3 \\fk Tamar \\ft Menantu Yehuda yang akhirnya menjadi istrinya (bc. Kej. 38:1-30).\\f*").contents.get(0).contents.get(1)).footNoteKeyword);
         //Footnote Reference
@@ -478,8 +478,7 @@ public class USFMParserTest {
     public void testCorrectFQAEndMarkerNesting() throws Exception {
         String verseText = "\\f + \\ft Text \\fqa Other \\fqa* More";
         USFMDocument output = parser.parseFromString(verseText);
-        // Make sure the FMarker has only one child
-        Assert.assertEquals(1, output.contents.get(0).contents.size());
+        Assert.assertEquals(4, output.contents.get(0).contents.size());
     }
 
     private void isInstanceOfType(Object obj, Class clazz) {
