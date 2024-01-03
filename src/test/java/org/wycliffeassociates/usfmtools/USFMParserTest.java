@@ -335,6 +335,7 @@ public class USFMParserTest {
         Assert.assertEquals("G5485", ((WMarker) parser.parseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|lemma=\"grace\" strong=\"G5485\" \\w* di Daftar Istilah.\\f*").contents.get(0).contents.get(2).contents.get(1)).attributes.get("strong"));
         Assert.assertEquals("H1234,G5485", ((WMarker) parser.parseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|strong=\"H1234,G5485\" \\w* di Daftar Istilah.\\f*").contents.get(0).contents.get(2).contents.get(1)).attributes.get("strong"));
         Assert.assertEquals("gnt5:51.1.2.1", ((WMarker) parser.parseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|lemma=\"grace\" srcloc=\"gnt5:51.1.2.1\" \\w* di Daftar Istilah.\\f*").contents.get(0).contents.get(2).contents.get(1)).attributes.get("srcloc"));
+        Assert.assertEquals("metadata", ((WMarker) parser.parseFromString("\\f + \\fr 3:5 \\fk berhala \\ft Lih. \\w gracious|lemma=\"grace\" x-myattr=\"metadata\" srcloc=\"gnt5:51.1.2.1\" \\w* di Daftar Istilah.\\f*").contents.get(0).contents.get(2).contents.get(1)).attributes.get("x-myattr"));
     }
 
     @Test
