@@ -8,6 +8,7 @@ import java.util.regex.Pattern;
  * Wordlist / Glossary / Dictionary Entry Marker
  */
 public class WMarker extends Marker {
+
     public String term;
     public HashMap<String, String> attributes;
     private static Pattern wordAttrPattern = Pattern.compile("([\\w-]+)=?\"?([\\w,:.]*)\"?", Pattern.DOTALL);
@@ -38,7 +39,15 @@ public class WMarker extends Marker {
             }
         }
 
-        return "";
+        return term;
     }
 
+    @Override
+    public ArrayList<java.lang.Class> getAllowedContents() {
+        return new ArrayList<java.lang.Class>(
+                Arrays.asList(
+                        TextBlock.class
+                )
+        );
+    }
 }
